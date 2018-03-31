@@ -3,10 +3,6 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const ConnectionSchema = new Schema({
-  planeId: {
-    type: Schema.Types.ObjectId,
-    ref: 'Plane',
-  },
   originAirportId: {
     type: Schema.Types.ObjectId,
     ref: 'Airport',
