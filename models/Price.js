@@ -7,9 +7,13 @@ const PriceSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'User',
   },
-  flightId: {
+  flight: {
     type: Schema.Types.ObjectId,
     ref: 'Flight',
+    required: true,
+  },
+  seat: {
+    type: Schema.Types.Number,
     required: true,
   },
   amount: {
@@ -19,6 +23,9 @@ const PriceSchema = new Schema({
   createdAt: {
     type: Schema.Types.Date,
     default: Date.now,
+    index: {
+      expires: 900,
+    },
   },
   __v: {
     type: Schema.Types.Number,

@@ -6,6 +6,11 @@ const MongoStore = require('connect-mongo')(session);
 
 const User = require('./routes/User');
 const Airport = require('./routes/Airport');
+const Connection = require('./routes/Connection');
+const Flight = require('./routes/Flight');
+const Plane = require('./routes/Plane');
+const Price = require('./routes/Price');
+const Ticket = require('./routes/Ticket');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -30,5 +35,10 @@ app.use(session({
 
 app.use('/users', User);
 app.use('/airports', Airport);
+app.use('/connections', Connection);
+app.use('/flights', Flight);
+app.use('/planes', Plane);
+app.use('/prices', Price);
+app.use('/tickets', Ticket);
 
 app.listen(port);

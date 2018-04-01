@@ -1,8 +1,7 @@
-import { connect } from 'mongoose';
-
 const express = require('express');
 
 const Flight = require('../controllers/Flight');
+const Ticket = require('../controllers/Ticket');
 
 const router = express.Router();
 
@@ -55,6 +54,14 @@ router.get('/:id/cancel', (req, res, next) => {
   Flight.cancel(req.params.id)
     .then((canceled) => {
       res.send(canceled);
+    })
+    .catch(next);
+});
+
+router.get('/:id/reverved', (req, res, next) => {
+  Ticket.getReservedSeats()
+    .then((seats) => {
+      res.send(seats);
     })
     .catch(next);
 });

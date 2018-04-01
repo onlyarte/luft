@@ -38,7 +38,12 @@ const TicketSchema = new Schema({
   status: {
     type: Schema.Types.String,
     required: true,
-    enum: ['pending', 'confirmed', 'cancelled', 'refunded'],
+    enum: ['pending', 'confirmed', 'cancelled', 'returned', 'refunded'],
+  },
+  createdAt: {
+    type: Schema.Types.Date,
+    default: Date.now,
+    required: true,
   },
   __v: {
     type: Schema.Types.Number,
