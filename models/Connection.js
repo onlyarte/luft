@@ -17,7 +17,7 @@ const ConnectionSchema = new Schema({
     type: Schema.Types.String,
     required: true,
     validate: {
-      validator: () => /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]/.test(this.departure_time),
+      validator: time => /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]/.test(time),
       message: 'Departure time is wrong!',
     },
   },
@@ -25,7 +25,7 @@ const ConnectionSchema = new Schema({
     type: Schema.Types.String,
     required: true,
     validate: {
-      validator: () => /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]/.test(this.arrival_time),
+      validator: time => /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]/.test(time),
       message: 'Arrival time is wrong',
     },
   },
@@ -33,21 +33,11 @@ const ConnectionSchema = new Schema({
     type: Schema.Types.Number,
     required: true,
   },
-  dateFrom: {
-    type: Schema.Types.Date,
-  },
-  dateTo: {
-    type: Schema.Types.Date,
-  },
-  period: [{
-    type: Schema.Types.String,
-    enum: ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'],
+  closed: {
+    type: Schema.Types.Boolean,
     required: true,
-  }],
-  available: [{
-    type: Schema.Types.Number,
-    required: true,
-  }],
+    default: false,
+  },
   __v: {
     type: Schema.Types.Number,
     select: false,

@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
+const cors = require('cors');
 
 const User = require('./routes/User');
 const Airport = require('./routes/Airport');
@@ -32,6 +33,7 @@ app.use(session({
   resave: false,
   saveUninitialized: true,
 }));
+app.use(cors());
 
 app.use('/users', User);
 app.use('/airports', Airport);

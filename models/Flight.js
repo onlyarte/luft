@@ -17,12 +17,6 @@ const FlightSchema = new Schema({
     type: Schema.Types.Date,
     required: true,
   },
-  status: {
-    type: Schema.Types.String,
-    enum: [],
-    default: 'active',
-    required: true,
-  },
   __v: {
     type: Schema.Types.Number,
     select: false,

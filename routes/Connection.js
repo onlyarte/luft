@@ -19,10 +19,6 @@ router.post('/new', (req, res, next) => {
     departureTime,
     arrivalTime,
     distance,
-    dateFrom,
-    dateTo,
-    period,
-    available,
   } = req.body;
   Connection.add({
     originAirportId,
@@ -30,10 +26,6 @@ router.post('/new', (req, res, next) => {
     departureTime,
     arrivalTime,
     distance,
-    dateFrom,
-    dateTo,
-    period,
-    available,
   })
     .then((created) => {
       res.send(created);
@@ -50,15 +42,9 @@ router.get('/:id', (req, res, next) => {
 });
 
 router.post('/:id/update', (req, res, next) => {
-  const {
-    available,
-    dateTo,
-    distance,
-  } = req.body;
+  const { closed } = req.body;
   Connection.update(req.params.id, {
-    available,
-    dateTo,
-    distance,
+    closed,
   })
     .then((updated) => {
       res.send(updated);

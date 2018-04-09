@@ -3,7 +3,7 @@ const Connection = require('../models/Connection');
 const get = function findConnectionById(connectionId) {
   return Connection.findById(connectionId)
     .exec()
-    .then(connection => connection.toObject);
+    .then(connection => connection.toObject());
 };
 
 const getAll = function findAllConnections() {

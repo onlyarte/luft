@@ -49,9 +49,12 @@ const find = function findFlightByOriginAndDestination(
 
 const add = function insertFlight(flight) {
   return Flight.create(flight)
-    .populate('plane')
-    .populate('connection')
-    .then(inserted => inserted.toObject());
+    .then(inserted => (
+      Flight.populate(inserted.toObject(), [
+        { path: 'plane' },
+        { path: 'connection' },
+      ])
+    ));
 };
 
 const cancel = function findFlightByIdAndSetStatusCanceled(flightId) {

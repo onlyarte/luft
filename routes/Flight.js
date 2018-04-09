@@ -22,7 +22,7 @@ router.post('/new', (req, res, next) => {
   Flight.add({
     plane: planeId,
     connection: connectionId,
-    date: new Date(decodeURI(date)),
+    date: new Date(date),
   })
     .then((created) => {
       res.send(created);
@@ -58,7 +58,7 @@ router.get('/:id/cancel', (req, res, next) => {
     .catch(next);
 });
 
-router.get('/:id/reverved', (req, res, next) => {
+router.get('/:id/reserved', (req, res, next) => {
   Ticket.getReservedSeats()
     .then((seats) => {
       res.send(seats);
