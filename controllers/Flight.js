@@ -20,31 +20,19 @@ const find = function findFlightByOriginAndDestination(
   destinationAirportId,
   date,
 ) {
-  return Flight.aggregate([
-    {
-      $lookup: {
-        from: 'Connection',
-        localField: 'connection',
-        foreignField: '_id',
-        as: 'connectionDoc',
-      },
-    },
-    {
-      $match: {
-        date: { $eq: date },
-        'connectionDoc.originAirportId': { $eq: originAirportId },
-        'connectionDoc.destinationAirportId': { $eq: destinationAirportId },
-      },
-    },
-  ])
+  return Flight.find({ date })
     .then(flights => (
       Flight.populate(flights, [
         { path: 'plane' },
-        { path: 'connection' },
+        {
+          path: 'connection',
+          populate: [
+            { path: 'originAirportId' },
+            { path: 'destinationAirportId' },
+          ],
+        },
       ])
-        .exec()
-    ))
-    .exec();
+    ));
 };
 
 const add = function insertFlight(flight) {
@@ -57,16 +45,7 @@ const add = function insertFlight(flight) {
     ));
 };
 
-const cancel = function findFlightByIdAndSetStatusCanceled(flightId) {
-  return Flight.findByIdAndUpdate(flightId, { status: 'canceled' })
-    .populate('plane')
-    .populate('connection')
-    .exec()
-    .then(updated => updated.toObject());
-};
-
 module.exports.get = get;
 module.exports.getAll = getAll;
 module.exports.find = find;
 module.exports.add = add;
-module.exports.cancel = cancel;

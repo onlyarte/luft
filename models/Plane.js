@@ -7,20 +7,14 @@ const PlaneSchema = new Schema({
     type: Schema.Types.String,
     required: true,
   },
-  scheme: {
-    rowsNum: Schema.Types.Number,
-    colsNum: Schema.Types.Number,
-    seatsNum: Schema.Types.Number,
-    rows: [{
-      _id: false,
-      rowID: Schema.Types.Number,
-      cols: [{
-        _id: false,
-        colID: Schema.Types.Number,
-        seat: Schema.Types.Number,
-      }],
-    }],
+  seats: {
+    type: Schema.Types.Number,
+    required: true,
   },
+  scheme: [[{
+    empty: Schema.Types.Boolean,
+    seatNum: Schema.Types.Number,
+  }]],
   __v: {
     type: Schema.Types.Number,
     select: false,

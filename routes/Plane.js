@@ -5,8 +5,8 @@ const Plane = require('../controllers/Plane');
 const router = express.Router();
 
 router.post('/new', (req, res, next) => {
-  const { tailNum, scheme } = req.body;
-  Plane.add({ tailNum, scheme })
+  const { tailNum, seats, scheme } = req.body;
+  Plane.add({ tailNum, seats, scheme })
     .then((plane) => {
       res.send(plane);
     })
@@ -25,6 +25,15 @@ router.get('/:id', (req, res, next) => {
   Plane.get(req.params.id)
     .then((plane) => {
       res.send(plane);
+    })
+    .catch(next);
+});
+
+router.post('/:id/update', (req, res, next) => {
+  const { tailNum, seats, scheme } = req.body;
+  Plane.update(req.params.id, { tailNum, seats, scheme })
+    .then((updated) => {
+      res.send(updated);
     })
     .catch(next);
 });
