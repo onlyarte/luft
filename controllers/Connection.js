@@ -3,11 +3,15 @@ const Connection = require('../models/Connection');
 const get = function findConnectionById(connectionId) {
   return Connection.findById(connectionId)
     .exec()
+    .populate('originAirport', '_id name')
+    .populate('destinationAirport', '_id name')
     .then(connection => connection.toObject());
 };
 
 const getAll = function findAllConnections() {
   return Connection.find({ })
+    .populate('originAirport', '_id name')
+    .populate('destinationAirport', '_id name')
     .exec();
 };
 

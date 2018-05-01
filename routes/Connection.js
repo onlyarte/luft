@@ -14,15 +14,15 @@ router.get('/', (req, res, next) => {
 
 router.post('/new', (req, res, next) => {
   const {
-    originAirportId,
-    destinationAirportId,
+    originAirport,
+    destinationAirport,
     departureTime,
     arrivalTime,
     distance,
   } = req.body;
   Connection.add({
-    originAirportId,
-    destinationAirportId,
+    originAirport,
+    destinationAirport,
     departureTime,
     arrivalTime,
     distance,
@@ -42,10 +42,8 @@ router.get('/:id', (req, res, next) => {
 });
 
 router.post('/:id/update', (req, res, next) => {
-  const { closed } = req.body;
-  Connection.update(req.params.id, {
-    closed,
-  })
+  const { departureTime, arrivalTime, distance } = req.body;
+  Connection.update(req.params.id, { departureTime, arrivalTime, distance })
     .then((updated) => {
       res.send(updated);
     })

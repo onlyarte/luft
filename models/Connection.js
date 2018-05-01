@@ -3,12 +3,12 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const ConnectionSchema = new Schema({
-  originAirportId: {
+  originAirport: {
     type: Schema.Types.ObjectId,
     ref: 'Airport',
     required: true,
   },
-  destinationAirportId: {
+  destinationAirport: {
     type: Schema.Types.ObjectId,
     ref: 'Airport',
     required: true,
@@ -32,11 +32,6 @@ const ConnectionSchema = new Schema({
   distance: {
     type: Schema.Types.Number,
     required: true,
-  },
-  closed: {
-    type: Schema.Types.Boolean,
-    required: true,
-    default: false,
   },
   __v: {
     type: Schema.Types.Number,
