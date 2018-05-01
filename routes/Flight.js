@@ -15,13 +15,13 @@ router.get('/', (req, res, next) => {
 
 router.post('/new', (req, res, next) => {
   const {
-    planeId,
-    connectionId,
+    plane,
+    connection,
     date,
   } = req.body;
   Flight.add({
-    plane: planeId,
-    connection: connectionId,
+    plane,
+    connection,
     date: new Date(date),
   })
     .then((created) => {

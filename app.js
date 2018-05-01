@@ -4,6 +4,9 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const cors = require('cors');
+const path = require('path');
+const fileUpload = require('express-fileupload');
+const cloudinary = require('cloudinary');
 
 const User = require('./routes/User');
 const Airport = require('./routes/Airport');
@@ -12,6 +15,7 @@ const Flight = require('./routes/Flight');
 const Plane = require('./routes/Plane');
 const Price = require('./routes/Price');
 const Ticket = require('./routes/Ticket');
+const Post = require('./routes/Post');
 
 const app = express();
 
@@ -24,6 +28,12 @@ mongoose.connect('mongodb://adm:ruslan16@ds163494.mlab.com:63494/luft')
     console.log(error);
   });
 
+cloudinary.config({
+  cloud_name: 'dsqyqvcq4',
+  api_key: '127728219583678',
+  api_secret: 'NpdV7OhIXX-FMhNe8xl8PBHg34E',
+});
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(session({
@@ -33,6 +43,8 @@ app.use(session({
   saveUninitialized: true,
 }));
 app.use(cors());
+app.use(fileUpload());
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/users', User);
 app.use('/airports', Airport);
@@ -41,6 +53,7 @@ app.use('/flights', Flight);
 app.use('/planes', Plane);
 app.use('/prices', Price);
 app.use('/tickets', Ticket);
+app.use('/posts', Post);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

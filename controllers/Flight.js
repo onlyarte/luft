@@ -1,7 +1,12 @@
 const Flight = require('../models/Flight');
 
-const castAirports = function flightToFlightWithAirportNames(flight) {
+const cast = function removeUnusedInfo(flight) {
   const processed = flight.toObject();
+
+  // remove time stamp from date
+  processed.date = processed.date.toISOString().slice(0, 10);
+
+  // airport object to name
   processed.connection.originAirport
     = flight.connection.originAirport.name;
   processed.connection.destinationAirport
@@ -25,7 +30,7 @@ const get = function findFlightById(flightId) {
         },
       ])
     ))
-    .then(flight => castAirports(flight));
+    .then(cast);
 };
 
 const getAll = function findAllFlights() {
@@ -45,7 +50,7 @@ const getAll = function findAllFlights() {
         },
       ])
     ))
-    .then(flights => flights.map(castAirports));
+    .then(flights => flights.map(cast));
 };
 
 const find = function findFlightByOriginAndDestination(
