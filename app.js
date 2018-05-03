@@ -13,7 +13,6 @@ const Airport = require('./routes/Airport');
 const Connection = require('./routes/Connection');
 const Flight = require('./routes/Flight');
 const Plane = require('./routes/Plane');
-const Price = require('./routes/Price');
 const Ticket = require('./routes/Ticket');
 const Post = require('./routes/Post');
 
@@ -51,7 +50,6 @@ app.use('/airports', Airport);
 app.use('/connections', Connection);
 app.use('/flights', Flight);
 app.use('/planes', Plane);
-app.use('/prices', Price);
 app.use('/tickets', Ticket);
 app.use('/posts', Post);
 

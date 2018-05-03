@@ -18,11 +18,13 @@ router.post('/new', (req, res, next) => {
     plane,
     connection,
     date,
+    price,
   } = req.body;
   Flight.add({
     plane,
     connection,
     date: new Date(date),
+    price,
   })
     .then((created) => {
       res.send(created);
@@ -50,18 +52,19 @@ router.get('/find/:origin/:destination/:date', (req, res, next) => {
     .catch(next);
 });
 
-router.get('/:id/cancel', (req, res, next) => {
-  Flight.cancel(req.params.id)
-    .then((canceled) => {
-      res.send(canceled);
-    })
-    .catch(next);
-});
-
 router.get('/:id/reserved', (req, res, next) => {
   Ticket.getReservedSeats()
     .then((seats) => {
       res.send(seats);
+    })
+    .catch(next);
+});
+
+router.post('/:id/update', (req, res, next) => {
+  const { coefficient } = req.body;
+  Flight.update(req.params.id, { coefficient })
+    .then((updated) => {
+      res.send(updated);
     })
     .catch(next);
 });

@@ -18,14 +18,12 @@ router.post('/new', (req, res, next) => {
     destinationAirport,
     departureTime,
     arrivalTime,
-    distance,
   } = req.body;
   Connection.add({
     originAirport,
     destinationAirport,
     departureTime,
     arrivalTime,
-    distance,
   })
     .then((created) => {
       res.send(created);
@@ -42,8 +40,8 @@ router.get('/:id', (req, res, next) => {
 });
 
 router.post('/:id/update', (req, res, next) => {
-  const { departureTime, arrivalTime, distance } = req.body;
-  Connection.update(req.params.id, { departureTime, arrivalTime, distance })
+  const { departureTime, arrivalTime } = req.body;
+  Connection.update(req.params.id, { departureTime, arrivalTime })
     .then((updated) => {
       res.send(updated);
     })

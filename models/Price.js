@@ -6,14 +6,11 @@ const PriceSchema = new Schema({
   user: {
     type: Schema.Types.ObjectId,
     ref: 'User',
+    required: false,
   },
   flight: {
     type: Schema.Types.ObjectId,
     ref: 'Flight',
-    required: true,
-  },
-  seat: {
-    type: Schema.Types.Number,
     required: true,
   },
   amount: {

@@ -17,6 +17,16 @@ const FlightSchema = new Schema({
     type: Schema.Types.Date,
     required: true,
   },
+  price: {
+    type: Schema.Types.Number,
+    required: true,
+    default: 500,
+  },
+  coefficient: {
+    type: Schema.Types.Number,
+    required: true,
+    default: 1,
+  },
   __v: {
     type: Schema.Types.Number,
     select: false,

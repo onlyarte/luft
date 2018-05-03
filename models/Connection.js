@@ -29,10 +29,6 @@ const ConnectionSchema = new Schema({
       message: 'Arrival time is wrong',
     },
   },
-  distance: {
-    type: Schema.Types.Number,
-    required: true,
-  },
   __v: {
     type: Schema.Types.Number,
     select: false,
