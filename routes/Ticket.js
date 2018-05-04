@@ -10,7 +10,7 @@ router.post('/new', (req, res, next) => {
   Price.get(priceId)
     .then((price) => {
       if (!price || price.flight !== flightId || price.seat !== seat) {
-        throw new Error('Sorry, the offer has expires.');
+        throw new Error('Sorry, the offer has expired.');
       }
       return price;
     })
@@ -20,7 +20,6 @@ router.post('/new', (req, res, next) => {
         seat,
         user: userId,
         flight: flightId,
-        status: 'pending',
         price: price.amount,
       })
     ))

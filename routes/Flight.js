@@ -44,7 +44,7 @@ router.get('/find/:origin/:destination/:date', (req, res, next) => {
   Flight.find(
     req.params.origin,
     req.params.destination,
-    new Date(decodeURI(req.params.date)),
+    new Date(Number(req.params.date)),
   )
     .then((flights) => {
       res.send(flights);
