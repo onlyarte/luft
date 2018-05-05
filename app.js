@@ -41,7 +41,10 @@ app.use(session({
   resave: false,
   saveUninitialized: true,
 }));
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:3001',
+  credentials: true,
+}));
 app.use(fileUpload());
 app.use(express.static(path.join(__dirname, 'public')));
 

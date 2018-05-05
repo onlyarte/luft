@@ -6,6 +6,12 @@ const get = function findUserById(userId) {
     .then(user => user.toObject());
 };
 
+const getByEmail = function findUserByEmail(email) {
+  return User.findOne({ email }, '-password')
+    .exec()
+    .then(user => user.toObject());
+};
+
 const getPassword = function findUserPasswordByEmail(email) {
   return User.findOne({ email })
     .exec()
@@ -14,13 +20,13 @@ const getPassword = function findUserPasswordByEmail(email) {
 
 const add = function insertUser(user) {
   return User.create(user)
-    .then(inserted => inserted.toObject());
+    .then(inserted => get(inserted.toObject()._id));
 };
 
 const update = function updateUser(userId, updates) {
   return User.findByIdAndUpdate(userId, updates, { new: true })
     .exec()
-    .then(updated => updated.toObject());
+    .then(updated => get(updated.toObject()._id));
 };
 
 const remove = function removeUser(userId) {
@@ -29,6 +35,7 @@ const remove = function removeUser(userId) {
 };
 
 module.exports.get = get;
+module.exports.getByEmail = getByEmail;
 module.exports.getPassword = getPassword;
 module.exports.add = add;
 module.exports.update = update;

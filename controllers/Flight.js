@@ -13,11 +13,11 @@ const cast = function removeUnusedInfo(flight) {
   // remove time stamp from date
   processed.date = processed.date.toISOString().slice(0, 10);
 
-  // airport object to name
+  // airport object to code
   processed.connection.originAirport
-    = flight.connection.originAirport.name;
+    = flight.connection.originAirport.code;
   processed.connection.destinationAirport
-    = flight.connection.destinationAirport.name;
+    = flight.connection.destinationAirport.code;
   return processed;
 };
 
@@ -31,8 +31,8 @@ const get = function findFlightById(flightId) {
           path: 'connection',
           select: 'originAirport destinationAirport departureTime arrivalTime',
           populate: [
-            { path: 'originAirport', select: 'name' },
-            { path: 'destinationAirport', select: 'name' },
+            { path: 'originAirport', select: 'code' },
+            { path: 'destinationAirport', select: 'code' },
           ],
         },
       ])
@@ -51,8 +51,8 @@ const getAll = function findAllFlights() {
           path: 'connection',
           select: 'originAirport destinationAirport departureTime arrivalTime',
           populate: [
-            { path: 'originAirport', select: 'name' },
-            { path: 'destinationAirport', select: 'name' },
+            { path: 'originAirport', select: 'code' },
+            { path: 'destinationAirport', select: 'code' },
           ],
         },
       ])
@@ -120,19 +120,6 @@ const find = function findFlightByOriginAndDestination(
           .then(price => ({ ...flight, price }))
       )))
     ));
-  /* return Flight.find({ date })
-    .then(flights => (
-      Flight.populate(flights, [
-        { path: 'plane' },
-        {
-          path: 'connection',
-          populate: [
-            { path: 'originAirport' },
-            { path: 'destinationAirport' },
-          ],
-        },
-      ])
-    )); */
 };
 
 const add = function insertFlight(flight) {

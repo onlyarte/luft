@@ -11,10 +11,6 @@ const UserSchema = new Schema({
     type: Schema.Types.String,
     required: true,
   },
-  birth: {
-    type: Schema.Types.Date,
-    required: true,
-  },
   email: {
     type: Schema.Types.String,
     required: true,

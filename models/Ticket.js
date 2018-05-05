@@ -17,10 +17,6 @@ const TicketSchema = new Schema({
       type: Schema.Types.String,
       required: true,
     },
-    birth: {
-      type: Schema.Types.Date,
-      required: true,
-    },
   },
   flight: {
     type: Schema.Types.ObjectId,

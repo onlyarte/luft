@@ -6,11 +6,13 @@ const Price = require('../controllers/Price');
 const router = express.Router();
 
 router.post('/new', (req, res, next) => {
-  const { userId, passanger, flightId, seat, priceId } = req.body;
+  const { passanger, flightId, seat, priceId } = req.body;
+  console.log(JSON.stringify({ passanger, flightId, seat, priceId }));
   Price.get(priceId)
     .then((price) => {
-      if (!price || price.flight !== flightId || price.seat !== seat) {
-        throw new Error('Sorry, the offer has expired.');
+      console.log(JSON.stringify(price));
+      if (!price || price.flight != flightId) {
+        throw new Error('Пропозиція вже не дійсна. Спробуйте зробити замовлення знову');
       }
       return price;
     })
@@ -18,7 +20,7 @@ router.post('/new', (req, res, next) => {
       Ticket.add({
         passanger,
         seat,
-        user: userId,
+        user: req.session.user,
         flight: flightId,
         price: price.amount,
       })

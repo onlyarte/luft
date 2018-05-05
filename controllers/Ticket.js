@@ -1,53 +1,55 @@
+const mongoose = require('mongoose');
+
 const Ticket = require('../models/Ticket');
+const Flight = require('./Flight');
+
+const populateFlight = function flightIdToObject(ticket) {
+  return Flight.get(ticket.flight)
+    .then((flight) => {
+      const formatted = { ...ticket };
+      formatted.flight = {
+        origin: flight.connection.originAirport,
+        destination: flight.connection.destinationAirport,
+        departure: flight.connection.departureTime,
+        arrival: flight.connection.arrivalTime,
+        date: flight.date,
+        plane: flight.plane.tailNum,
+      };
+      return formatted;
+    });
+};
 
 const get = function findTicketById(ticketId) {
   return Ticket.findById(ticketId)
-    .populate({
-      path: 'flight',
-      populate: {
-        path: 'connection',
-      },
-    })
     .exec()
-    .then(ticket => ticket.toObject());
+    .then(ticket => ticket.toObject())
+    .then(populateFlight);
 };
 
 const findByUser = function findTicketsByUserId(userId) {
-  return Ticket.find({ user: userId })
-    .populate({
-      path: 'flight',
-      populate: {
-        path: 'connection',
-      },
-    })
-    .exec();
+  return Ticket.find({ user: mongoose.Types.ObjectId(userId) })
+    .exec()
+    .then(tickets =>
+      Promise.all(tickets.map(ticket => populateFlight(ticket.toObject()))));
 };
 
 const findByStatus = function findTicketsByStatus(status) {
   return Ticket.find({ status })
-    .populate({
-      path: 'flight',
-      populate: {
-        path: 'connection',
-      },
-    })
-    .exec();
+    .exec()
+    .then(tickets =>
+      Promise.all(tickets.map(populateFlight)));;
 };
 
 const findByFlight = function findTicketsByFlightId(flightId) {
-  return Ticket.find({ flight: flightId })
-    .populate({
-      path: 'flight',
-      populate: {
-        path: 'connection',
-      },
-    })
-    .exec();
+  return Ticket.find({ flight: mongoose.Types.ObjectId(flightId) })
+    .exec()
+    .then(tickets =>
+      Promise.all(tickets.map(populateFlight)));;
 };
 
 const getReservedSeats = function findReservedSeats(flightId) {
   return Ticket.find({
-    flight: flightId,
+    flight: mongoose.Types.ObjectId(flightId),
     status: {
       $in: ['pending', 'confirmed'],
     },
