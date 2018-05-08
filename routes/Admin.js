@@ -2,17 +2,8 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 
 const User = require('../controllers/User');
-const Ticket = require('../controllers/Ticket');
 
 const router = express.Router();
-
-router.get('/current', (req, res, next) => {
-  User.get(req.session.user)
-    .then((user) => {
-      res.send(user);
-    })
-    .catch(next);
-});
 
 router.post('/login', (req, res, next) => {
   const { email, password } = req.body;
@@ -31,10 +22,14 @@ router.post('/login', (req, res, next) => {
     .then(() => (
       User.getByEmail(email)
     ))
-  /* Set sesstion variable & send user details */
+  /* Set session variable & send user details */
     .then((user) => {
-      req.session.user = user._id;
-      res.send(user);
+      if (user.isSuper) {
+        req.session.admin = user._id;
+        res.send(user);
+      } else {
+        throw new Error('Доступ заборонено!');
+      }
     })
     .catch(next);
 });
@@ -60,6 +55,7 @@ router.post('/new', (req, res, next) => {
         birth,
         email,
         password: encryptedPassword,
+        isSuper: true,
       })
     ))
     .then((created) => {
@@ -69,17 +65,17 @@ router.post('/new', (req, res, next) => {
     .catch(next);
 });
 
-router.get('/tickets', (req, res, next) => {
-  Ticket.findByUser(req.session.user)
-    .then((tickets) => {
-      res.send(tickets);
+router.get('/current', (req, res, next) => {
+  User.get(req.session.admin)
+    .then((user) => {
+      res.send(user);
     })
     .catch(next);
 });
 
 router.post('/current/update', (req, res, next) => {
   const { email, firstname, surname } = req.body;
-  User.update(req.session.user, {
+  User.update(req.session.admin, {
     email,
     firstname,
     surname,
@@ -94,7 +90,7 @@ router.post('/current/password/update', (req, res, next) => {
   const { password } = req.body;
   bcrypt.hash(password, 10)
     .then(encryptedPassword => (
-      User.update(req.session.user, {
+      User.update(req.session.admin, {
         password: encryptedPassword,
       })
     ))
@@ -104,8 +100,8 @@ router.post('/current/password/update', (req, res, next) => {
     .catch(next);
 });
 
-router.delete('/current/remove', (req, res, next) => {
-  User.remove(req.session.user)
+router.delete('/:id/remove', (req, res, next) => {
+  User.remove(req.params.id)
     .then(() => {
       res.sendStatus(200);
     })

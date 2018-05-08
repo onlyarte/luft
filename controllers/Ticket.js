@@ -8,6 +8,7 @@ const populateFlight = function flightIdToObject(ticket) {
     .then((flight) => {
       const formatted = { ...ticket };
       formatted.flight = {
+        _id: flight._id,
         origin: flight.connection.originAirport,
         destination: flight.connection.destinationAirport,
         departure: flight.connection.departureTime,
@@ -37,14 +38,20 @@ const findByStatus = function findTicketsByStatus(status) {
   return Ticket.find({ status })
     .exec()
     .then(tickets =>
-      Promise.all(tickets.map(populateFlight)));;
+      Promise.all(tickets.map(ticket => populateFlight(ticket.toObject()))));
 };
 
 const findByFlight = function findTicketsByFlightId(flightId) {
   return Ticket.find({ flight: mongoose.Types.ObjectId(flightId) })
     .exec()
     .then(tickets =>
-      Promise.all(tickets.map(populateFlight)));;
+      Promise.all(tickets.map(ticket => populateFlight(ticket.toObject()))));
+};
+
+const findByPeriod = function findTicketsByPeriod(dateFrom, dateTo) {
+  return Ticket.find({ createdAt: { $gte: dateFrom, $lte: dateTo } })
+    .then(tickets =>
+      Promise.all(tickets.map(ticket => populateFlight(ticket.toObject()))));
 };
 
 const getReservedSeats = function findReservedSeats(flightId) {
@@ -73,6 +80,7 @@ module.exports.get = get;
 module.exports.findByUser = findByUser;
 module.exports.findByStatus = findByStatus;
 module.exports.findByFlight = findByFlight;
+module.exports.findByPeriod = findByPeriod;
 module.exports.getReservedSeats = getReservedSeats;
 module.exports.add = add;
 module.exports.updateStatus = updateStatus;

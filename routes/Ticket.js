@@ -7,7 +7,6 @@ const router = express.Router();
 
 router.post('/new', (req, res, next) => {
   const { passanger, flightId, seat, priceId } = req.body;
-  console.log(JSON.stringify({ passanger, flightId, seat, priceId }));
   Price.get(priceId)
     .then((price) => {
       console.log(JSON.stringify(price));
@@ -32,6 +31,25 @@ router.get('/:id', (req, res, next) => {
   Ticket.get(req.params.id)
     .then((ticket) => {
       res.send(ticket);
+    })
+    .catch(next);
+});
+
+router.get('/period/:from/:to', (req, res, next) => {
+  Ticket.findByPeriod(
+    new Date(req.params.from),
+    new Date(req.params.to),
+  )
+    .then((tickets) => {
+      res.send(tickets);
+    })
+    .catch(next);
+});
+
+router.get('/flight/:id', (req, res, next) => {
+  Ticket.findByFlight(req.params.id)
+    .then((tickets) => {
+      res.send(tickets);
     })
     .catch(next);
 });

@@ -42,6 +42,11 @@ const TicketSchema = new Schema({
     default: Date.now,
     required: true,
   },
+  updatedAt: {
+    type: Schema.Types.Date,
+    default: Date.now,
+    required: true,
+  },
   __v: {
     type: Schema.Types.Number,
     select: false,

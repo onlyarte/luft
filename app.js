@@ -9,6 +9,7 @@ const fileUpload = require('express-fileupload');
 const cloudinary = require('cloudinary');
 
 const User = require('./routes/User');
+const Admin = require('./routes/Admin');
 const Airport = require('./routes/Airport');
 const Connection = require('./routes/Connection');
 const Flight = require('./routes/Flight');
@@ -49,6 +50,7 @@ app.use(fileUpload());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/users', User);
+app.use('/admin', Admin);
 app.use('/airports', Airport);
 app.use('/connections', Connection);
 app.use('/flights', Flight);

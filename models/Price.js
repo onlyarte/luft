@@ -3,11 +3,6 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const PriceSchema = new Schema({
-  user: {
-    type: Schema.Types.ObjectId,
-    ref: 'User',
-    required: false,
-  },
   flight: {
     type: Schema.Types.ObjectId,
     ref: 'Flight',

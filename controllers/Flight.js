@@ -6,9 +6,10 @@ const Connection = require('../models/Connection');
 const Airport = require('../models/Airport');
 
 const Price = require('./Price');
+const Ticket = require('./Ticket');
 
 const cast = function removeUnusedInfo(flight) {
-  const processed = flight.toObject();
+  const processed = { ...flight };
 
   // remove time stamp from date
   processed.date = processed.date.toISOString().slice(0, 10);
@@ -19,6 +20,23 @@ const cast = function removeUnusedInfo(flight) {
   processed.connection.destinationAirport
     = flight.connection.destinationAirport.code;
   return processed;
+};
+
+const markReserved = function getReservedSeatsAndMark(flight) {
+  const res = { ...flight };
+  return Ticket.getReservedSeats(flight._id)
+    .then((reserved) => {
+      flight.plane.scheme.forEach((row, i) => {
+        row.forEach((place, j) => {
+          if (!place.empty && reserved.includes(place.seatNum)) {
+            res.plane.scheme[i][j].reserved = true;
+          }
+        });
+      });
+      res.seatsAvailable = flight.plane.seats - reserved.length;
+      res.isAvailable = res.seatsAvailable > 0;
+      return res;
+    });
 };
 
 const get = function findFlightById(flightId) {
@@ -37,16 +55,16 @@ const get = function findFlightById(flightId) {
         },
       ])
     ))
+    .then(flight => flight.toObject())
     .then(cast);
 };
 
 const getAll = function findAllFlights() {
   return Flight.find({ })
-    .populate('plane', '_id tailNum')
     .exec()
     .then(flights => (
       Flight.populate(flights, [
-        { path: 'plane', select: '_id tailNum' },
+        { path: 'plane' },
         {
           path: 'connection',
           select: 'originAirport destinationAirport departureTime arrivalTime',
@@ -56,6 +74,10 @@ const getAll = function findAllFlights() {
           ],
         },
       ])
+    ))
+    .then(flights => flights.map(flight => flight.toObject()))
+    .then(flights => (
+      Promise.all(flights.map(markReserved))
     ))
     .then(flights => flights.map(cast));
 };
@@ -119,7 +141,14 @@ const find = function findFlightByOriginAndDestination(
         })
           .then(price => ({ ...flight, price }))
       )))
-    ));
+    ))
+  // mark reserved seats
+    .then(flights => (
+      Promise.all(flights.map(markReserved))
+    ))
+  // remove not available flights
+    .then(flights =>
+      flights.filter(flight => flight.isAvailable));
 };
 
 const add = function insertFlight(flight) {

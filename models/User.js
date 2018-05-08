@@ -20,6 +20,10 @@ const UserSchema = new Schema({
     type: Schema.Types.String,
     required: true,
   },
+  isSuper: {
+    type: Schema.Types.Boolean,
+    required: false,
+  },
   __v: {
     type: Schema.Types.Number,
     select: false,

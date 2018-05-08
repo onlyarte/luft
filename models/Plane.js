@@ -14,6 +14,7 @@ const PlaneSchema = new Schema({
   scheme: [[{
     empty: Schema.Types.Boolean,
     seatNum: Schema.Types.Number,
+    _id: false,
   }]],
   __v: {
     type: Schema.Types.Number,
