@@ -69,7 +69,7 @@ router.post('/new', (req, res, next) => {
     .catch(next);
 });
 
-router.get('/tickets', (req, res, next) => {
+router.get('/current/tickets', (req, res, next) => {
   Ticket.findByUser(req.session.user)
     .then((tickets) => {
       res.send(tickets);
