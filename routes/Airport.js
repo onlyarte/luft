@@ -13,6 +13,11 @@ router.get('/', (req, res, next) => {
 });
 
 router.post('/new', (req, res, next) => {
+  if (!req.session.admin) {
+    next(new Error('Access denied!'));
+    return;
+  }
+
   const { code, name, country, city } = req.body;
   Airport.add({
     code,
@@ -35,6 +40,11 @@ router.get('/:id', (req, res, next) => {
 });
 
 router.post('/:id/update', (req, res, next) => {
+  if (!req.session.admin) {
+    next(new Error('Access denied!'));
+    return;
+  }
+
   const { name } = req.body;
   Airport.update(req.params.id, { name })
     .then((updated) => {
@@ -44,6 +54,11 @@ router.post('/:id/update', (req, res, next) => {
 });
 
 router.delete('/:id/remove', (req, res, next) => {
+  if (!req.session.admin) {
+    next(new Error('Access denied!'));
+    return;
+  }
+
   Airport.remove(req.params.id)
     .then(() => {
       res.sendStatus(200);

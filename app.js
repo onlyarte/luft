@@ -43,7 +43,7 @@ app.use(session({
   saveUninitialized: true,
 }));
 app.use(cors({
-  origin: 'http://localhost:3001',
+  origin: true,
   credentials: true,
 }));
 app.use(fileUpload());

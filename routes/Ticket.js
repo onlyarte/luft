@@ -24,6 +24,9 @@ router.post('/new', (req, res, next) => {
         price: price.amount,
       })
     ))
+    .then((ticket) => {
+      res.send(ticket);
+    })
     .catch(next);
 });
 
@@ -36,6 +39,11 @@ router.get('/:id', (req, res, next) => {
 });
 
 router.get('/period/:from/:to', (req, res, next) => {
+  if (!req.session.admin) {
+    next(new Error('Access denied!'));
+    return;
+  }
+
   Ticket.findByPeriod(
     new Date(req.params.from),
     new Date(req.params.to),
@@ -47,6 +55,11 @@ router.get('/period/:from/:to', (req, res, next) => {
 });
 
 router.get('/flight/:id', (req, res, next) => {
+  if (!req.session.admin) {
+    next(new Error('Access denied!'));
+    return;
+  }
+
   Ticket.findByFlight(req.params.id)
     .then((tickets) => {
       res.send(tickets);

@@ -16,6 +16,7 @@ router.get('/current', (req, res, next) => {
 
 router.post('/login', (req, res, next) => {
   const { email, password } = req.body;
+  console.log(email + password);
 
   /* Compare passwords */
   User.getPassword(email)
@@ -50,14 +51,13 @@ router.delete('/logout', (req, res, next) => {
 });
 
 router.post('/new', (req, res, next) => {
-  const { firstname, surname, birth, email, password } = req.body;
+  const { firstname, surname, email, password } = req.body;
 
   bcrypt.hash(password, 10)
     .then(encryptedPassword => (
       User.add({
         firstname,
         surname,
-        birth,
         email,
         password: encryptedPassword,
       })

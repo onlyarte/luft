@@ -14,12 +14,18 @@ router.get('/', (req, res, next) => {
 });
 
 router.post('/new', (req, res, next) => {
+  if (!req.session.admin) {
+    next(new Error('Access denied!'));
+    return;
+  }
+
   const {
     plane,
     connection,
     date,
     price,
   } = req.body;
+
   Flight.add({
     plane,
     connection,
@@ -61,6 +67,11 @@ router.get('/:id/reserved', (req, res, next) => {
 });
 
 router.post('/:id/update', (req, res, next) => {
+  if (!req.session.admin) {
+    next(new Error('Access denied!'));
+    return;
+  }
+
   const { coefficient } = req.body;
   Flight.update(req.params.id, { coefficient })
     .then((updated) => {

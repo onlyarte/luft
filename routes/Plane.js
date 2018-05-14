@@ -5,6 +5,11 @@ const Plane = require('../controllers/Plane');
 const router = express.Router();
 
 router.post('/new', (req, res, next) => {
+  if (!req.session.admin) {
+    next(new Error('Access denied!'));
+    return;
+  }
+
   const { tailNum, seats, scheme } = req.body;
   Plane.add({ tailNum, seats, scheme })
     .then((plane) => {
@@ -30,6 +35,11 @@ router.get('/:id', (req, res, next) => {
 });
 
 router.post('/:id/update', (req, res, next) => {
+  if (!req.session.admin) {
+    next(new Error('Access denied!'));
+    return;
+  }
+
   const { tailNum, seats, scheme } = req.body;
   Plane.update(req.params.id, { tailNum, seats, scheme })
     .then((updated) => {
@@ -39,6 +49,11 @@ router.post('/:id/update', (req, res, next) => {
 });
 
 router.delete('/:id/remove', (req, res, next) => {
+  if (!req.session.admin) {
+    next(new Error('Access denied!'));
+    return;
+  }
+
   Plane.remove(req.params.id)
     .then(() => {
       res.sendStatus(200);

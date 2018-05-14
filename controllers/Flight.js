@@ -44,7 +44,7 @@ const get = function findFlightById(flightId) {
     .exec()
     .then(flight => (
       Flight.populate(flight, [
-        { path: 'plane', select: '_id tailNum' },
+        { path: 'plane' },
         {
           path: 'connection',
           select: 'originAirport destinationAirport departureTime arrivalTime',
@@ -89,6 +89,7 @@ const find = function findFlightByOriginAndDestination(
 ) {
   return Flight.aggregate([
     { $match: { date } },
+    { $project: { __v: false } },
     {
       $lookup: {
         from: Plane.collection.name,

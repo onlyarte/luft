@@ -14,7 +14,13 @@ router.get('/', (req, res, next) => {
 });
 
 router.post('/new', (req, res, next) => {
+  if (!req.session.admin) {
+    next(new Error('Access denied!'));
+    return;
+  }
+
   const { img, title, text } = req.body;
+
   Post.add({
     img,
     title,
@@ -35,6 +41,11 @@ router.get('/:id', (req, res, next) => {
 });
 
 router.post('/:id/update', (req, res, next) => {
+  if (!req.session.admin) {
+    next(new Error('Access denied!'));
+    return;
+  }
+
   const { img, title, text } = req.body;
   Post.update(req.params.id, { img, title, text })
     .then((updated) => {
@@ -44,6 +55,11 @@ router.post('/:id/update', (req, res, next) => {
 });
 
 router.delete('/:id/remove', (req, res, next) => {
+  if (!req.session.admin) {
+    next(new Error('Access denied!'));
+    return;
+  }
+
   Post.remove(req.params.id)
     .then(() => {
       res.sendStatus(200);
